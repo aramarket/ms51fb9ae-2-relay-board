@@ -1,0 +1,6 @@
+".\Output\main.obj",
+".\Output\adc.obj",
+".\Output\seven_segment_cc.obj" 
+TO ".\Output\2_Relay_Board" 
+PRINT(".\LST\2_Relay_Board.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

@@ -1,0 +1,245 @@
+C51 COMPILER V9.60.7.0   ADC_VOLT                                                          11/03/2024 15:51:23 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE ADC_VOLT
+OBJECT MODULE PLACED IN .\Output\adc_volt.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\Common\adc_volt.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\..\Incl
+                    -ude) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\adc_volt.lst) TABS(2) OBJECT(.\Output\adc_volt.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "SFR_Macro.h"
+   3          #include "Function_define.h"
+   4          #include "Common.h"
+   5          #include "Delay.h"
+   6          #include "Seven_segment.h"
+   7          #include "Flash.h"
+   8          
+   9          #define EEnable_ADC_AIN4      ADCCON0&=0xF0;ADCCON0|=0x04;ADCCON1|=SET_BIT0   //P05 output
+  10          #define EEnable_ADC_AIN3      ADCCON0&=0xF0;ADCCON0|=0x03;ADCCON1|=SET_BIT0   //P06 input
+  11          
+  12          #define Volt_ADDRESS        0x1600
+  13          
+  14          #define timer_clock_speed  16000000.0
+  15          
+  16          unsigned int max_adc,x,y;
+  17          int i,j,vol_dis,curr_dis;
+  18          
+  19          float volt_5v = 5.030;  // 5.030 perfect  0.01 ~ 1v
+  20          float volt_5i = 4.980; // 4.980 perfect upto 30amp fol gola 0.02
+  21          //float volt_5i = 5.12; // 4.980 perfect upto 30amp fol R. S.
+  22          
+  23          
+  24          unsigned long overflow = 0;
+  25          unsigned long pulse_time = 0;
+  26          unsigned long start_time = 0;
+  27          unsigned long end_time = 0;
+  28          
+  29          
+  30          void setup(void);
+  31          void setup_GPIOs(void);
+  32          void setup_Timer_2(void);
+  33          void setup_capture(void);
+  34          float f = 0.0;
+  35          void frequency(void);
+  36          
+  37          void Timer_2_ISR(void) interrupt 5
+  38          { 
+  39   1        clr_TF2;         // Clear timmer 2 flag
+  40   1        overflow++;      
+  41   1      }
+  42          void Input_Capture_ISR(void) interrupt 12
+  43          {
+  44   1        if((CAPCON0 & SET_BIT0) != 0)
+  45   1        {
+  46   2          clr_CAPF0;        // Input capture 0 flag   
+  47   2          end_time = C0H;
+  48   2          end_time <<= 8;
+  49   2          end_time |= C0L;
+  50   2          pulse_time = ((overflow << 16) - start_time + end_time);
+  51   2          start_time = end_time;
+  52   2          overflow = 0;
+  53   2        }
+  54   1      }
+C51 COMPILER V9.60.7.0   ADC_VOLT                                                          11/03/2024 15:51:23 PAGE 2   
+
+  55          
+  56          
+  57          
+  58          
+  59          void display(int l);
+  60          void ac_voltage_read(char volt_or_amp, int dis_value);
+  61            
+  62          void volt5_diplsay(void){
+  63   1        seven_segment_6(volt_5v*1000);
+  64   1      }
+  65          
+  66          void volt_read_eeprom(void){
+  67   1        unsigned int x;
+  68   1        x = read_eeprom(Volt_ADDRESS);
+  69   1        x += read_eeprom(Volt_ADDRESS+1) << 8;
+  70   1        if(x <= 65530){
+  71   2        volt_5v = (float)x/1000;
+  72   2        }else;
+  73   1      }
+  74          
+  75          void volt_write_eeprom(void){
+  76   1        int x;
+  77   1        ac_voltage_read('v',9);
+  78   1        volt_5v = 220/(0.0385*max_adc);
+  79   1        x = volt_5v*1000;
+  80   1        write_eeprom(Volt_ADDRESS,x);
+  81   1      }
+  82          
+  83          void int_ADC(void) {
+  84   1        Enable_ADC_BandGap;
+  85   1        P05_Input_Mode;
+  86   1        P06_Input_Mode;
+  87   1        AINDIDS=0x00;
+  88   1        AINDIDS|=SET_BIT4; //for channal P05
+  89   1        AINDIDS|=SET_BIT3; //for channal P06
+  90   1      }
+  91          unsigned int read_ADC() {
+  92   1        unsigned int val=0;
+  93   1        clr_ADCF;
+  94   1        set_ADCS;                 // ADC start trig signal
+  95   1        while(ADCF == 0);
+  96   1        val |= ADCRL;      // Get result                    
+  97   1        val |= ADCRH<<4;   // Get result  
+  98   1        val &= 0xffff;
+  99   1        //ADCCON1 |= 0x00;
+ 100   1        return (val);
+ 101   1      }
+ 102          
+ 103          void ac_voltage_read(char volt, int dis_value){
+ 104   1        max_adc = 0;
+ 105   1        y = 0;
+ 106   1        x = 0;
+ 107   1        if(volt == 'output'){EEnable_ADC_AIN4;}
+*** ERROR C101 IN LINE 107 OF ..\..\Common\adc_volt.c: ''o': invalid character constant
+*** ERROR C141 IN LINE 107 OF ..\..\Common\adc_volt.c: syntax error near 'utput', expected ','
+*** ERROR C101 IN LINE 107 OF ..\..\Common\adc_volt.c: '')': invalid character constant
+*** ERROR C202 IN LINE 107 OF ..\..\Common\adc_volt.c: 'utput': undefined identifier
+*** ERROR C141 IN LINE 107 OF ..\..\Common\adc_volt.c: syntax error near '{', expected ';'
+ 108   1        else if (volt == 'input'){EEnable_ADC_AIN3;}
+*** ERROR C141 IN LINE 108 OF ..\..\Common\adc_volt.c: syntax error near 'else', expected '__asm'
+*** ERROR C101 IN LINE 108 OF ..\..\Common\adc_volt.c: ''i': invalid character constant
+*** ERROR C141 IN LINE 108 OF ..\..\Common\adc_volt.c: syntax error near 'nput', expected ','
+C51 COMPILER V9.60.7.0   ADC_VOLT                                                          11/03/2024 15:51:23 PAGE 3   
+
+*** ERROR C101 IN LINE 108 OF ..\..\Common\adc_volt.c: '')': invalid character constant
+*** ERROR C202 IN LINE 108 OF ..\..\Common\adc_volt.c: 'nput': undefined identifier
+*** ERROR C141 IN LINE 108 OF ..\..\Common\adc_volt.c: syntax error near '{', expected ';'
+ 109   1        for(i=0; i<=30; i++)
+ 110   1        {
+ 111   2          for(j=0; j<=160; j++)
+ 112   2          {
+ 113   3            x = read_ADC(); //Digital value convert
+ 114   3            if(y < x) {
+ 115   4               y = x;
+ 116   4            }
+ 117   3          }
+ 118   2          display(dis_value);
+ 119   2          if(max_adc < y) {
+ 120   3              max_adc = y;
+ 121   3            }
+ 122   2        }
+ 123   1        if(volt == 'output'){
+*** ERROR C101 IN LINE 123 OF ..\..\Common\adc_volt.c: ''o': invalid character constant
+*** ERROR C141 IN LINE 123 OF ..\..\Common\adc_volt.c: syntax error near 'utput', expected ','
+*** ERROR C101 IN LINE 123 OF ..\..\Common\adc_volt.c: '')': invalid character constant
+*** ERROR C202 IN LINE 123 OF ..\..\Common\adc_volt.c: 'utput': undefined identifier
+*** ERROR C141 IN LINE 123 OF ..\..\Common\adc_volt.c: syntax error near '{', expected ';'
+ 124   2          vol_dis_out = max_adc*volt_5v*0.0385; // (0.7071*221)/4095 = 0.0385; for 1k preset = 0.044
+ 125   2        }else if(volt == 'input'){
+*** ERROR C141 IN LINE 125 OF ..\..\Common\adc_volt.c: syntax error near 'else', expected '__asm'
+*** ERROR C101 IN LINE 125 OF ..\..\Common\adc_volt.c: ''i': invalid character constant
+*** ERROR C141 IN LINE 125 OF ..\..\Common\adc_volt.c: syntax error near 'nput', expected ','
+*** ERROR C101 IN LINE 125 OF ..\..\Common\adc_volt.c: '')': invalid character constant
+*** ERROR C202 IN LINE 125 OF ..\..\Common\adc_volt.c: 'nput': undefined identifier
+*** ERROR C141 IN LINE 125 OF ..\..\Common\adc_volt.c: syntax error near '{', expected ';'
+ 126   2          vol_dis_in = max_adc*volt_5v*0.0385; // (0.7071*221)/4095 = 0.0385;
+ 127   2        }else{;}
+*** ERROR C141 IN LINE 127 OF ..\..\Common\adc_volt.c: syntax error near 'else', expected '__asm'
+ 128   1      }
+ 129          
+ 130          void display(int l){                                                      // 1 = top diplay
+ 131   1        switch(l){                                                              // 2 = top with dot display 
+ 132   2          case 0:                                                               // 3 = bottom diplay
+ 133   2            display_digit(vol_dis,1);display_digit(curr_dis,4);break;           // 4 = bottom with dot display                  
+             -                            
+ 134   2          case 1:
+ 135   2            display_char('n','u','n',1);display_char('n','u','n',1);break;
+ 136   2          case 2:
+ 137   2            display_digit(vol_dis,1);display_digit(vol_dis,1);break;
+ 138   2          case 3:
+ 139   2            display_char('n','a','n',1);display_char('n','a','n',1);break;
+ 140   2          case 4:
+ 141   2            display_digit(curr_dis,2);display_digit(curr_dis,2);break;
+ 142   2          case 5:
+ 143   2            display_char('n','u','n',3);display_char('n','u','n',1);break;
+ 144   2          case 6:
+ 145   2            display_digit(vol_dis,3);display_digit(vol_dis,3);break;
+ 146   2          case 7:
+ 147   2            display_char('n','a','n',3);display_char('n','a','n',1);break;
+ 148   2          case 8:
+ 149   2            display_digit(curr_dis,4);display_digit(curr_dis,4);break;
+ 150   2          case 9:
+ 151   2            display_digit(vol_dis,1);display_char('n','f','n',3);break;
+ 152   2          case 10:
+ 153   2            display_digit(vol_dis,1);display_char('n','a','n',3);break;
+ 154   2          case 11:
+C51 COMPILER V9.60.7.0   ADC_VOLT                                                          11/03/2024 15:51:23 PAGE 4   
+
+ 155   2            display_digit(vol_dis,1);display_digit(f,4);break;
+ 156   2          case 12:
+ 157   2            display_digit(f,2);display_digit(f,4);break;
+ 158   2        }
+ 159   1      }
+ 160          
+ 161          void ac_voltage_frequency(int line_value){
+ 162   1        frequency();
+ 163   1        display(line_value);
+ 164   1      }
+ 165          void ac_voltage_frequency_only(int line_value){
+ 166   1        int z;
+ 167   1        frequency();
+ 168   1        for(z=0; z<=50; z++){
+ 169   2          display(line_value);
+ 170   2        }
+ 171   1      }
+ 172          void frequency(void){
+ 173   1          f = (timer_clock_speed / ((float)pulse_time));
+ 174   1          f *= 10;
+ 175   1      }
+ 176          void setup(void)
+ 177          {
+ 178   1        setup_GPIOs();
+ 179   1        setup_capture();
+ 180   1        setup_Timer_2();
+ 181   1        pin_int();
+ 182   1        set_EA;                       
+ 183   1      }
+ 184          
+ 185          void setup_GPIOs(void)
+ 186          {
+ 187   1        //P00_PushPull_Mode;
+ 188   1        //P12_Input_Mode;
+ 189   1        P15_Input_Mode;
+ 190   1      }
+ 191          void setup_Timer_2(void)
+ 192          {
+ 193   1        T2CON &= ~SET_BIT0;    // Compare mode.       
+ 194   1        T2MOD = 0x00;                 
+ 195   1        set_TR2;               // Timer 2 run control        
+ 196   1        set_ET2;               // Enable Timer 2 interrupt       
+ 197   1      }
+ 198          void setup_capture(void)
+ 199          {
+ 200   1        //IC0_P12_CAP0_FallingEdge_Capture;
+ 201   1        IC7_P15_CAP0_FallingEdge_Capture;
+ 202   1        set_ECAP;              // Enable input capture interrupt
+ 203   1      }
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  23 ERROR(S)

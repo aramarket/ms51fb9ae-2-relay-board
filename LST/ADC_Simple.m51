@@ -1,0 +1,479 @@
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    11/07/2024  10:37:12  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.4.0, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Output\main.obj, .\Output\adc.obj, .\Output\seven_segment_cc.obj TO .\Output\ADC_Simple PR
+>> INT (.\LST\ADC_Simple.m51) RAMSIZE (256) DISABLEWARNING (16)
+
+
+MEMORY MODEL: LARGE WITH FLOATING POINT ARITHMETIC
+
+
+INPUT MODULES INCLUDED:
+  .\Output\main.obj (MAIN)
+  .\Output\adc.obj (ADC)
+  .\Output\seven_segment_cc.obj (SEVEN_SEGMENT_CC)
+  C:\KEIL_V5\C51\LIB\C51FPL.LIB (?C?FPADD)
+  C:\KEIL_V5\C51\LIB\C51FPL.LIB (?C?FPMUL)
+  C:\KEIL_V5\C51\LIB\C51FPL.LIB (?C?FPDIV)
+  C:\KEIL_V5\C51\LIB\C51FPL.LIB (?C?FCAST)
+  C:\KEIL_V5\C51\LIB\C51FPL.LIB (?C?CASTF)
+  C:\KEIL_V5\C51\LIB\C51FPL.LIB (?C?FPGETOPN)
+  C:\KEIL_V5\C51\LIB\C51L.LIB (?C_STARTUP)
+  C:\KEIL_V5\C51\LIB\C51L.LIB (?C?SIDIV)
+  C:\KEIL_V5\C51\LIB\C51L.LIB (?C?ILDIX)
+  C:\KEIL_V5\C51\LIB\C51L.LIB (?C?SLDIV)
+  C:\KEIL_V5\C51\LIB\C51L.LIB (?C?LNEG)
+  C:\KEIL_V5\C51\LIB\C51L.LIB (?C?LSTXDATA)
+  C:\KEIL_V5\C51\LIB\C51L.LIB (?C?LSTKXDATA)
+  C:\KEIL_V5\C51\LIB\C51L.LIB (?C_INIT)
+  C:\KEIL_V5\C51\LIB\C51L.LIB (?C?UIDIV)
+  C:\KEIL_V5\C51\LIB\C51L.LIB (?C?ULDIV)
+
+
+LINK MAP OF MODULE:  .\Output\ADC_Simple (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            IDATA   0008H     0001H     UNIT         ?STACK
+
+            * * * * * * *  X D A T A   M E M O R Y  * * * * * * *
+            XDATA   0000H     0050H     UNIT         ?XD?SEVEN_SEGMENT_CC
+            XDATA   0050H     001AH     UNIT         _XDATA_GROUP_
+            XDATA   006AH     0003H     UNIT         ?XD?_DISPLAY_SINGLE_NUMBER?SEVEN_SEGMENT_CC
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0517H     UNIT         ?C?LIB_CODE
+            CODE    051AH     017CH     UNIT         ?PR?MAIN?MAIN
+            CODE    0696H     0111H     UNIT         ?PR?_CALCULATE_AC_VOLTAGE?ADC
+            CODE    07A7H     00F1H     UNIT         ?PR?_READ_ADC?ADC
+            CODE    0898H     00C9H     UNIT         ?PR?_DISPLAY_DOUBLE_NUMBER?SEVEN_SEGMENT_CC
+            CODE    0961H     0099H     UNIT         ?PR?_SET_SEGMENTS?SEVEN_SEGMENT_CC
+            CODE    09FAH     008CH     UNIT         ?C_C51STARTUP
+            CODE    0A86H     006BH     UNIT         ?PR?_DISPLAY_SINGLE_NUMBER?SEVEN_SEGMENT_CC
+            CODE    0AF1H     0055H     UNIT         ?C_INITSEG
+            CODE    0B46H     004DH     UNIT         ?PR?_DISPLAY_DIGIT?SEVEN_SEGMENT_CC
+            CODE    0B93H     0044H     UNIT         ?C?LDIV
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/07/2024  10:37:12  PAGE 2
+
+
+            CODE    0BD7H     003DH     UNIT         ?PR?PIN_INT?MAIN
+            CODE    0C14H     0025H     UNIT         ?PR?_DELAY_MS?SEVEN_SEGMENT_CC
+            CODE    0C39H     0013H     UNIT         ?PR?INT_ADC?ADC
+
+
+
+OVERLAY MAP OF MODULE:   .\Output\ADC_Simple (MAIN)
+
+
+SEGMENT                                            XDATA_GROUP
+  +--> CALLED SEGMENT                            START    LENGTH
+----------------------------------------------------------------
+?C_C51STARTUP                                    -----    -----
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAIN                                    0050H    000EH
+  +--> ?PR?PIN_INT?MAIN
+  +--> ?PR?INT_ADC?ADC
+  +--> ?PR?_CALCULATE_AC_VOLTAGE?ADC
+  +--> ?PR?_DISPLAY_DOUBLE_NUMBER?SEVEN_SEGM...
+
+?PR?_CALCULATE_AC_VOLTAGE?ADC                    005EH    000CH
+  +--> ?PR?_READ_ADC?ADC
+
+?PR?_DISPLAY_DOUBLE_NUMBER?SEVEN_SEGM...         005EH    0007H
+  +--> ?PR?_DISPLAY_DIGIT?SEVEN_SEGMENT_CC
+
+?PR?_DISPLAY_DIGIT?SEVEN_SEGMENT_CC              -----    -----
+  +--> ?PR?_SET_SEGMENTS?SEVEN_SEGMENT_CC
+  +--> ?PR?_DELAY_MS?SEVEN_SEGMENT_CC
+
+?PR?_DELAY_MS?SEVEN_SEGMENT_CC                   0065H    0002H
+
+
+
+SYMBOL TABLE OF MODULE:  .\Output\ADC_Simple (MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:00B1H         PUBLIC        P0M1
+  D:00B3H         PUBLIC        P1M1
+  D:00B2H         PUBLIC        P0M2
+  D:0080H         PUBLIC        P0
+  D:00B4H         PUBLIC        P1M2
+  D:0090H         PUBLIC        P1
+  D:00ACH         PUBLIC        P3M1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  D:00ADH         PUBLIC        P3M2
+  D:00D8H         PUBLIC        PWMCON0
+  D:00A8H         PUBLIC        IE
+  D:00B8H         PUBLIC        IP
+  C:051AH         PUBLIC        main
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/07/2024  10:37:12  PAGE 3
+
+
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  B:0090H.5       PUBLIC        P15
+  B:0090H.6       PUBLIC        P16
+  D:00F8H         PUBLIC        SCON_1
+  D:00E8H         PUBLIC        ADCCON0
+  D:00C0H         PUBLIC        I2CON
+  D:00C8H         PUBLIC        T2CON
+  C:0BD7H         PUBLIC        pin_int
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          PIN_INT
+  C:0BD7H         LINE#         19
+  C:0BD7H         LINE#         21
+  C:0BDDH         LINE#         22
+  C:0BE3H         LINE#         25
+  C:0BE9H         LINE#         26
+  C:0BEFH         LINE#         27
+  C:0BF5H         LINE#         28
+  C:0BFBH         LINE#         29
+  C:0C01H         LINE#         30
+  C:0C07H         LINE#         33
+  C:0C0DH         LINE#         34
+  C:0C13H         LINE#         35
+  -------         ENDPROC       PIN_INT
+  -------         PROC          MAIN
+  -------         DO            
+  X:0050H         SYMBOL        i
+  X:0052H         SYMBOL        output_voltage
+  X:0054H         SYMBOL        input_voltage
+  X:0056H         SYMBOL        output_sum
+  X:005AH         SYMBOL        input_sum
+  -------         ENDDO         
+  C:051AH         LINE#         38
+  C:051AH         LINE#         41
+  C:052EH         LINE#         43
+  C:0531H         LINE#         44
+  C:0534H         LINE#         45
+  C:0536H         LINE#         46
+  C:0538H         LINE#         47
+  C:0538H         LINE#         50
+  C:0542H         LINE#         51
+  C:054CH         LINE#         54
+  C:0553H         LINE#         55
+  C:058DH         LINE#         56
+  C:059EH         LINE#         57
+  C:05D8H         LINE#         58
+  C:05E9H         LINE#         59
+  C:060BH         LINE#         62
+  C:062AH         LINE#         63
+  C:0649H         LINE#         66
+  C:0653H         LINE#         67
+  C:0655H         LINE#         68
+  C:0657H         LINE#         69
+  C:066CH         LINE#         70
+  C:066EH         LINE#         71
+  C:0670H         LINE#         73
+  C:068FH         LINE#         74
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/07/2024  10:37:12  PAGE 4
+
+
+  C:0691H         LINE#         75
+  C:0693H         LINE#         76
+  C:0693H         LINE#         77
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        ADC
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:00F6H         PUBLIC        AINDIDS
+  D:00B1H         PUBLIC        P0M1
+  D:00B3H         PUBLIC        P1M1
+  D:00B2H         PUBLIC        P0M2
+  D:0080H         PUBLIC        P0
+  D:00B4H         PUBLIC        P1M2
+  D:0090H         PUBLIC        P1
+  D:00ACH         PUBLIC        P3M1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  D:00ADH         PUBLIC        P3M2
+  D:00D8H         PUBLIC        PWMCON0
+  D:00A8H         PUBLIC        IE
+  B:00E8H.7       PUBLIC        ADCF
+  D:00B8H         PUBLIC        IP
+  B:00E8H.6       PUBLIC        ADCS
+  C:0696H         PUBLIC        _calculate_ac_voltage
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00F8H         PUBLIC        SCON_1
+  C:07A7H         PUBLIC        _read_ADC
+  D:00E8H         PUBLIC        ADCCON0
+  D:00E1H         PUBLIC        ADCCON1
+  D:00C0H         PUBLIC        I2CON
+  D:00C3H         PUBLIC        ADCRH
+  D:00C8H         PUBLIC        T2CON
+  D:00C2H         PUBLIC        ADCRL
+  C:0C39H         PUBLIC        int_ADC
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          INT_ADC
+  C:0C39H         LINE#         19
+  C:0C39H         LINE#         20
+  C:0C42H         LINE#         22
+  C:0C45H         LINE#         23
+  C:0C48H         LINE#         24
+  C:0C4BH         LINE#         25
+  -------         ENDPROC       INT_ADC
+  -------         PROC          _READ_ADC
+  D:0006H         SYMBOL        channel
+  -------         DO            
+  D:0004H         SYMBOL        val
+  -------         ENDDO         
+  C:07A7H         LINE#         28
+  C:07A7H         LINE#         29
+  C:07AAH         LINE#         32
+  C:07D8H         LINE#         33
+  C:07E7H         LINE#         34
+  C:07FBH         LINE#         35
+  C:080FH         LINE#         36
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/07/2024  10:37:12  PAGE 5
+
+
+  C:0823H         LINE#         37
+  C:0837H         LINE#         38
+  C:084BH         LINE#         39
+  C:085FH         LINE#         40
+  C:0876H         LINE#         41
+  C:087AH         LINE#         42
+  C:087AH         LINE#         44
+  C:087CH         LINE#         45
+  C:087EH         LINE#         47
+  C:0881H         LINE#         50
+  C:0886H         LINE#         52
+  C:0894H         LINE#         54
+  C:0894H         LINE#         56
+  C:0897H         LINE#         57
+  -------         ENDPROC       _READ_ADC
+  -------         PROC          _CALCULATE_AC_VOLTAGE
+  X:005EH         SYMBOL        channel
+  -------         DO            
+  X:0060H         SYMBOL        i
+  X:0062H         SYMBOL        adc_sum
+  D:0004H         SYMBOL        V_adc
+  D:0004H         SYMBOL        V_dc
+  X:0066H         SYMBOL        V_rms
+  D:0004H         SYMBOL        adc_avg
+  -------         ENDDO         
+  C:0696H         LINE#         60
+  C:069EH         LINE#         62
+  C:06A8H         LINE#         66
+  C:06AFH         LINE#         67
+  C:06EDH         LINE#         68
+  C:070CH         LINE#         71
+  C:0728H         LINE#         74
+  C:073DH         LINE#         77
+  C:0748H         LINE#         80
+  C:0759H         LINE#         83
+  C:0777H         LINE#         86
+  C:0796H         LINE#         87
+  -------         ENDPROC       _CALCULATE_AC_VOLTAGE
+  -------         ENDMOD        ADC
+
+  -------         MODULE        SEVEN_SEGMENT_CC
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  B:0080H.0       PUBLIC        SEG_A
+  D:0090H         PUBLIC        P1
+  B:0080H.4       PUBLIC        SEG_B
+  D:00A0H         PUBLIC        P2
+  B:0090H.3       PUBLIC        SEG_C
+  D:00B0H         PUBLIC        P3
+  B:0090H.2       PUBLIC        SEG_D
+  B:0090H.1       PUBLIC        SEG_E
+  B:0080H.1       PUBLIC        SEG_F
+  B:0090H.4       PUBLIC        SEG_G
+  D:00D8H         PUBLIC        PWMCON0
+  D:00A8H         PUBLIC        IE
+  D:00B8H         PUBLIC        IP
+  C:0961H         PUBLIC        _set_segments
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/07/2024  10:37:12  PAGE 6
+
+
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  B:0090H.0       PUBLIC        DIGIT1_A
+  D:00F8H         PUBLIC        SCON_1
+  B:0080H.7       PUBLIC        DIGIT1_B
+  B:0080H.2       PUBLIC        DIGIT2_A
+  B:00B0H.0       PUBLIC        DIGIT2_B
+  B:0080H.3       PUBLIC        DIGIT3_A
+  C:0898H         PUBLIC        _display_double_number
+  B:0090H.7       PUBLIC        DIGIT3_B
+  C:0A86H         PUBLIC        _display_single_number
+  C:0C14H         PUBLIC        _delay_ms
+  B:00A0H.0       PUBLIC        SEG_DP
+  D:00E8H         PUBLIC        ADCCON0
+  D:00C0H         PUBLIC        I2CON
+  D:00C8H         PUBLIC        T2CON
+  X:0000H         PUBLIC        segment_codes
+  C:0B4AH         PUBLIC        _display_digit
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          _DELAY_MS
+  D:0006H         SYMBOL        ms
+  -------         DO            
+  X:0065H         SYMBOL        i
+  -------         ENDDO         
+  C:0C14H         LINE#         40
+  C:0C14H         LINE#         41
+  C:0C1EH         LINE#         42
+  C:0C28H         LINE#         43
+  C:0C38H         LINE#         44
+  C:0C38H         LINE#         45
+  -------         ENDPROC       _DELAY_MS
+  -------         PROC          _SET_SEGMENTS
+  D:0007H         SYMBOL        value
+  C:0961H         LINE#         48
+  C:0961H         LINE#         49
+  C:0974H         LINE#         50
+  C:0987H         LINE#         51
+  C:099AH         LINE#         52
+  C:09ADH         LINE#         53
+  C:09C0H         LINE#         54
+  C:09D3H         LINE#         55
+  C:09E6H         LINE#         56
+  C:09F9H         LINE#         57
+  -------         ENDPROC       _SET_SEGMENTS
+  -------         PROC          L?0020
+  -------         ENDPROC       L?0020
+  -------         PROC          _DISPLAY_DIGIT
+  D:0006H         SYMBOL        display
+  D:0005H         SYMBOL        digit
+  D:0003H         SYMBOL        value
+  C:0B4AH         LINE#         60
+  C:0B4CH         LINE#         62
+  C:0B52H         LINE#         63
+  C:0B58H         LINE#         66
+  C:0B5DH         LINE#         69
+  C:0B61H         LINE#         70
+  C:0B67H         LINE#         71
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/07/2024  10:37:12  PAGE 7
+
+
+  C:0B6DH         LINE#         72
+  C:0B74H         LINE#         73
+  C:0B7AH         LINE#         74
+  C:0B80H         LINE#         75
+  C:0B86H         LINE#         76
+  C:0B8CH         LINE#         77
+  C:0B8CH         LINE#         80
+  -------         ENDPROC       _DISPLAY_DIGIT
+  -------         PROC          _DISPLAY_SINGLE_NUMBER
+  X:006AH         SYMBOL        number
+  D:0002H         SYMBOL        display
+  -------         DO            
+  D:0003H         SYMBOL        hundreds
+  X:006CH         SYMBOL        tens
+  D:0001H         SYMBOL        ones
+  -------         ENDDO         
+  C:0A86H         LINE#         84
+  C:0A90H         LINE#         86
+  C:0AA8H         LINE#         87
+  C:0AC1H         LINE#         88
+  C:0AD2H         LINE#         91
+  C:0AD9H         LINE#         92
+  C:0AE4H         LINE#         93
+  C:0AECH         LINE#         96
+  C:0AF0H         LINE#         97
+  -------         ENDPROC       _DISPLAY_SINGLE_NUMBER
+  -------         PROC          _DISPLAY_DOUBLE_NUMBER
+  X:005EH         SYMBOL        number1
+  D:0002H         SYMBOL        number2
+  -------         DO            
+  X:0060H         SYMBOL        hundreds1
+  X:0061H         SYMBOL        tens1
+  X:0062H         SYMBOL        ones1
+  X:0063H         SYMBOL        hundreds2
+  X:0064H         SYMBOL        tens2
+  D:0002H         SYMBOL        ones2
+  -------         ENDDO         
+  C:0898H         LINE#         100
+  C:08A4H         LINE#         102
+  C:08BDH         LINE#         103
+  C:08D8H         LINE#         104
+  C:08ECH         LINE#         106
+  C:0901H         LINE#         107
+  C:0916H         LINE#         108
+  C:0923H         LINE#         111
+  C:092FH         LINE#         112
+  C:093AH         LINE#         113
+  C:0945H         LINE#         115
+  C:094DH         LINE#         116
+  C:0954H         LINE#         117
+  C:095CH         LINE#         120
+  C:0960H         LINE#         121
+  -------         ENDPROC       _DISPLAY_DOUBLE_NUMBER
+  -------         ENDMOD        SEVEN_SEGMENT_CC
+
+  -------         MODULE        ?C?FPADD
+  C:000AH         PUBLIC        ?C?FPADD
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/07/2024  10:37:12  PAGE 8
+
+
+  C:0006H         PUBLIC        ?C?FPSUB
+  -------         ENDMOD        ?C?FPADD
+
+  -------         MODULE        ?C?FPMUL
+  C:00FBH         PUBLIC        ?C?FPMUL
+  -------         ENDMOD        ?C?FPMUL
+
+  -------         MODULE        ?C?FPDIV
+  C:0204H         PUBLIC        ?C?FPDIV
+  -------         ENDMOD        ?C?FPDIV
+
+  -------         MODULE        ?C?FCAST
+  C:02ABH         PUBLIC        ?C?FCASTC
+  C:02A6H         PUBLIC        ?C?FCASTI
+  C:02A1H         PUBLIC        ?C?FCASTL
+  -------         ENDMOD        ?C?FCAST
+
+  -------         MODULE        ?C?CASTF
+  C:02DFH         PUBLIC        ?C?CASTF
+  -------         ENDMOD        ?C?CASTF
+
+  -------         MODULE        ?C?SIDIV
+  C:0360H         PUBLIC        ?C?SIDIV
+  -------         ENDMOD        ?C?SIDIV
+
+  -------         MODULE        ?C?ILDIX
+  C:0396H         PUBLIC        ?C?ILDIX
+  -------         ENDMOD        ?C?ILDIX
+
+  -------         MODULE        ?C?SLDIV
+  C:0B93H         PUBLIC        ?C?SLDIV
+  -------         ENDMOD        ?C?SLDIV
+
+  -------         MODULE        ?C?LNEG
+  C:03ACH         PUBLIC        ?C?LNEG
+  -------         ENDMOD        ?C?LNEG
+
+  -------         MODULE        ?C?LSTXDATA
+  C:03BAH         PUBLIC        ?C?LSTXDATA
+  -------         ENDMOD        ?C?LSTXDATA
+
+  -------         MODULE        ?C?LSTKXDATA
+  C:03C6H         PUBLIC        ?C?LSTKXDATA
+  -------         ENDMOD        ?C?LSTKXDATA
+
+  -------         MODULE        ?C?UIDIV
+  C:03F7H         PUBLIC        ?C?UIDIV
+  -------         ENDMOD        ?C?UIDIV
+
+  -------         MODULE        ?C?ULDIV
+  C:0488H         PUBLIC        ?C?ULDIV
+  -------         ENDMOD        ?C?ULDIV
+
+Program Size: data=9.0 xdata=109 code=3148
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

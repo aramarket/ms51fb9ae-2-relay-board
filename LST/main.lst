@@ -1,0 +1,115 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              11/07/2024 11:34:51 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Output\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Code\main.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(.\Header;.\StdDriver\i
+                    -nc) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\main.lst) TABS(2) OBJECT(.\Output\main.obj)
+
+line level    source
+
+   1          #include "MS51_16K.h"
+   2          #include "seven_segment.h"
+   3          #include "adc.h"
+   4          
+   5          #define output_pin   P_06
+   6          #define input_pin    P_05
+   7          
+   8          #define relay_1_step_up   P16 // step up
+   9          #define relay_2_step_down   P15 // step down
+  10          
+  11          #define NUM_SAMPLES     8       // Number of samples for averaging
+  12          #define STEP_UP_THRESHOLD 216    // Upper limit to deactivate step-up relay
+  13          #define STEP_DOWN_THRESHOLD 239  // Upper limit for step-down relay
+  14          #define BUFFER_VOLT 1 
+  15          
+  16          
+  17          
+  18          void pin_int(){
+  19   1      
+  20   1          P00_PUSHPULL_MODE;
+  21   1          P04_PUSHPULL_MODE;
+  22   1          P13_PUSHPULL_MODE;
+  23   1          P12_PUSHPULL_MODE;
+  24   1          P11_PUSHPULL_MODE;
+  25   1          P01_PUSHPULL_MODE;
+  26   1          P14_PUSHPULL_MODE;
+  27   1        
+  28   1          //PushPull_Mode for digits
+  29   1          P10_PUSHPULL_MODE;
+  30   1          P02_PUSHPULL_MODE;
+  31   1          P03_PUSHPULL_MODE;
+  32   1          P07_PUSHPULL_MODE;
+  33   1          P30_PUSHPULL_MODE;
+  34   1          P17_PUSHPULL_MODE;
+  35   1          
+  36   1          //For Relay
+  37   1          P16_PUSHPULL_MODE;  //Relay1
+  38   1          P15_PUSHPULL_MODE;  //Relay2
+  39   1      }
+  40          
+  41          
+  42          void main (void) {
+  43   1          int i;
+  44   1          int output_voltage, input_voltage;
+  45   1          long output_sum = 0, input_sum = 0;
+  46   1          
+  47   1          pin_int();
+  48   1          int_ADC();
+  49   1          relay_1_step_up = 1;
+  50   1          relay_2_step_down = 0;
+  51   1          while (1) {
+  52   2            // Reset sums for new sampling
+  53   2            output_sum = 0;
+  54   2            input_sum = 0;
+C51 COMPILER V9.60.7.0   MAIN                                                              11/07/2024 11:34:51 PAGE 2   
+
+  55   2            
+  56   2            // Take 10 samples
+  57   2            for (i = 0; i < NUM_SAMPLES; i++) {
+  58   3              output_sum += calculate_ac_voltage(output_pin);  // Read and sum output ADC
+  59   3              display_double_number(output_voltage, input_voltage);
+  60   3              input_sum += calculate_ac_voltage(input_pin);    // Read and sum input ADC
+  61   3              display_double_number(output_voltage, input_voltage);
+  62   3            }
+  63   2              
+  64   2            // Calculate average voltage values
+  65   2            output_voltage = (output_sum / NUM_SAMPLES);
+  66   2            input_voltage = input_sum / NUM_SAMPLES;
+  67   2            
+  68   2              // Control logic with hysteresis
+  69   2              if(input_voltage < STEP_UP_THRESHOLD - BUFFER_VOLT) {  //STEP_UP_THRESHOLD = 216 - 1 it work on 21
+             -4
+  70   3                  relay_1_step_up = 1;
+  71   3                  relay_2_step_down = 0;
+  72   3              } else if(input_voltage > STEP_DOWN_THRESHOLD + BUFFER_VOLT) { //STEP_DOWN_THRESHOLD = 239 + 1 it 
+             -work on 241
+  73   3                  relay_1_step_up = 0; 
+  74   3                  relay_2_step_down = 1;
+  75   3                //STEP_UP_THRESHOLD_HIGH = 216 && STEP_DOWN_THRESHOLD_HIGH = 239 it work within 216 - 239
+  76   3              } else if(input_voltage >= STEP_UP_THRESHOLD && input_voltage <= STEP_DOWN_THRESHOLD) {
+  77   3                  relay_1_step_up = 0;
+  78   3                  relay_2_step_down = 0;
+  79   3              }
+  80   2          }
+  81   1      }
+  82          
+  83          
+  84          
+  85          
+  86          
+  87          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    470    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----      14
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

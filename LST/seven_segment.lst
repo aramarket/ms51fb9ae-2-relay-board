@@ -1,0 +1,146 @@
+C51 COMPILER V9.60.7.0   SEVEN_SEGMENT                                                     11/06/2024 11:20:45 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE SEVEN_SEGMENT
+OBJECT MODULE PLACED IN .\Output\seven_segment.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Code\seven_segment.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(.\Include) DE
+                    -FINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\seven_segment.lst) TABS(2) OBJECT(.\Output\seven_segment.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          
+   3          // Define pins for each segment
+   4          sbit SEG_A =  P0^0;
+   5          sbit SEG_B =  P0^4;
+   6          sbit SEG_C =  P1^3;
+   7          sbit SEG_D =  P1^2;
+   8          sbit SEG_E =  P1^1;
+   9          sbit SEG_F =  P0^1;
+  10          sbit SEG_G =  P1^4;
+  11          sbit SEG_DP = P2^0;
+  12          
+  13          // Define pins for digit control for the first display
+  14          sbit DIGIT1_A = P1^0;   
+  15          sbit DIGIT2_A = P0^2;   
+  16          sbit DIGIT3_A = P0^3;   
+  17          
+  18          // Define pins for digit control for the second display
+  19          sbit DIGIT1_B = P0^7;
+  20          sbit DIGIT2_B = P3^0;
+  21          sbit DIGIT3_B = P1^7;
+  22          
+  23          // Lookup table for numbers 0-9 in 7-segment display format
+  24          const unsigned char segment_codes[10][8] = {
+  25              {0, 0, 0, 0, 0, 0, 1, 1}, // 0
+  26              {1, 0, 0, 1, 1, 1, 1, 1}, // 1
+  27              {0, 0, 1, 0, 0, 1, 0, 1}, // 2
+  28              {0, 0, 0, 0, 1, 1, 0, 1}, // 3
+  29              {1, 0, 0, 1, 1, 0, 0, 1}, // 4
+  30              {0, 1, 0, 0, 1, 0, 0, 1}, // 5
+  31              {0, 1, 0, 0, 0, 0, 0, 1}, // 6
+  32              {0, 0, 0, 1, 1, 1, 1, 1}, // 7
+  33              {0, 0, 0, 0, 0, 0, 0, 1}, // 8
+  34              {0, 0, 0, 0, 1, 0, 0, 1}  // 9
+  35          };
+  36          
+  37          // Delay function
+  38          void delay_ms(unsigned int ms) {
+  39   1          while (ms--) {
+  40   2              unsigned int i = 500;
+  41   2              while (i--);
+  42   2          }
+  43   1      }
+  44          
+  45          // Set the segments for a specific digit
+  46          void set_segments(unsigned char value) {
+  47   1          SEG_A = segment_codes[value][0];
+  48   1          SEG_B = segment_codes[value][1];
+  49   1          SEG_C = segment_codes[value][2];
+  50   1          SEG_D = segment_codes[value][3];
+  51   1          SEG_E = segment_codes[value][4];
+  52   1          SEG_F = segment_codes[value][5];
+  53   1          SEG_G = segment_codes[value][6];
+  54   1          SEG_DP = segment_codes[value][7];
+C51 COMPILER V9.60.7.0   SEVEN_SEGMENT                                                     11/06/2024 11:20:45 PAGE 2   
+
+  55   1      }
+  56          
+  57          // Display a digit on one of the 3-digit displays
+  58          void display_digit(unsigned char display, unsigned char digit, unsigned char value) {
+  59   1          // Turn off all digits first
+  60   1          DIGIT1_A = 0; DIGIT2_A = 0; DIGIT3_A = 0;
+  61   1          DIGIT1_B = 0; DIGIT2_B = 0; DIGIT3_B = 0;
+  62   1      
+  63   1          // Set the segments for the current digit
+  64   1          set_segments(value);
+  65   1      
+  66   1          // Activate the current digit on the selected display
+  67   1          if (display == 1) {
+  68   2              if (digit == 1) DIGIT1_A = 1;
+  69   2              if (digit == 2) DIGIT2_A = 1;
+  70   2              if (digit == 3) DIGIT3_A = 1;
+  71   2          } else if (display == 2) {
+  72   2              if (digit == 1) DIGIT1_B = 1;
+  73   2              if (digit == 2) DIGIT2_B = 1;
+  74   2              if (digit == 3) DIGIT3_B = 1;
+  75   2          }
+  76   1      
+  77   1          // Short delay for multiplexing
+  78   1          delay_ms(1);
+  79   1      }
+  80          // Display a single 3-digit number on the specified display
+  81          void display_single_number(int number, unsigned char display) {
+  82   1          // Break down number into hundreds, tens, and ones
+  83   1          unsigned char hundreds = (number / 100) % 10;
+  84   1          unsigned char tens = (number / 10) % 10;
+  85   1          unsigned char ones = number % 10;
+  86   1      
+  87   1          // Display each digit for the specified display
+  88   1          display_digit(display, 1, hundreds);
+  89   1          display_digit(display, 2, tens);
+  90   1          display_digit(display, 3, ones);
+  91   1        
+  92   1          // Turn off Last digits
+  93   1          DIGIT3_A = 0; DIGIT3_B = 0;
+  94   1      }
+  95          
+  96          // Display both display 3-digit numbers (0-999 each)
+  97          void display_double_number(int number1, int number2) {
+  98   1          // Break down numbers into hundreds, tens, and ones
+  99   1          unsigned char hundreds1 = (number1 / 100) % 10;
+ 100   1          unsigned char tens1 = (number1 / 10) % 10;
+ 101   1          unsigned char ones1 = number1 % 10;
+ 102   1      
+ 103   1          unsigned char hundreds2 = (number2 / 100) % 10;
+ 104   1          unsigned char tens2 = (number2 / 10) % 10;
+ 105   1          unsigned char ones2 = number2 % 10;
+ 106   1      
+ 107   1          // Display each digit for both displays
+ 108   1          display_digit(1, 1, hundreds1);
+ 109   1          display_digit(1, 2, tens1);
+ 110   1          display_digit(1, 3, ones1);
+ 111   1      
+ 112   1          display_digit(2, 1, hundreds2);
+ 113   1          display_digit(2, 2, tens2);
+ 114   1          display_digit(2, 3, ones2);
+ 115   1          
+ 116   1          // Turn off Last digits
+C51 COMPILER V9.60.7.0   SEVEN_SEGMENT                                                     11/06/2024 11:20:45 PAGE 3   
+
+ 117   1          DIGIT3_A = 0; DIGIT3_B = 0;
+ 118   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    575    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     80      12
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
